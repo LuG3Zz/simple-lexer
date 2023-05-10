@@ -1,0 +1,72 @@
+#main {
+  layout: vertical;
+}
+
+Button {
+  content-align: center middle;
+  width:100%;
+  border: tall $background;
+
+}
+Button:hover {
+  background:white;
+}
+#btn_group Button{
+  content-align: center middle;
+  align-horizontal: center;
+  border: tall $background;
+
+}
+
+Footer{
+  background: $surface-darken-1;
+}
+
+
+
+#text {
+  max-height:56%;
+  content-align: center middle;
+  text-style: bold;
+
+}
+
+Filebrowser.-show-tree #tree-view {
+    display: block;        
+    max-width: 100%;
+}
+
+
+#code-view {
+    overflow: auto scroll;  
+    width: 100%;
+    min-height:50%;
+}
+#code {
+    width: auto;    
+}
+
+#file{
+    layout: vertical;
+    background: $surface-darken-1;
+
+}
+
+#left{
+    dock: left;
+    width: 30%;
+    height: 100%;
+
+}
+#right{
+    dock: right;
+    width: auto;
+    height: 100%;
+
+}
+DataTable {
+  max-height:50%;
+  text-style: bold;
+  min-height:50%;
+}
+

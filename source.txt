@@ -1,0 +1,8 @@
+program p
+var i:integer;
+  x:array[1..16] of integer;
+  {12312}
+begin
+  i:=5+10;
+  x[i]:=0;
+end.
