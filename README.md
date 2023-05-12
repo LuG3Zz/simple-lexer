@@ -12,7 +12,7 @@ Some Screen short:
 ![a](./image/lexer_word.png)
 <center>word analysis</center>
 
-![auto](./image/dfa.gv.png)
+![auto](./image/dfa.png)
 <center>State Transition Diagrams</center>
 
 
