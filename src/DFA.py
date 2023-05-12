@@ -23,7 +23,7 @@ class DFA:
         #状态机识别出的内容行号
         self.line = 1
         # 状态机的图
-        self.graph = graphviz.Digraph("DFA", filename="../image/dfa.gv",format="png",engine='dot')
+        self.graph = graphviz.Digraph("DFA", filename="./image/dfa.gv",format="png",engine='dot')
 
     def view(self):
         # 添加开始箭头

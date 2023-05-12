@@ -37,7 +37,7 @@ class BasicTable(Screen):
         if event.button.id == "btn_exit":
             app.pop_screen()
         if event.button.id == "btn_add":
-            if input.value in self.tb or input.value is None:
+            if input.value in self.tb :
                 label.update("添加失败，值已存在或为空")
                 pass
             else:
@@ -77,6 +77,8 @@ class KeywordTable(BasicTable):
 
 class WordsTable(BasicTable):
     def on_mount(self) -> None:
+        title = self.query_one("#title",Static)
+        title.update("字母表")
         table = self.query_one("#key", DataTable)
         table.clear(True)
         self.tb = alphabet 
@@ -89,6 +91,8 @@ class WordsTable(BasicTable):
 class SingleTable(BasicTable):
 
     def on_mount(self) -> None:
+        title = self.query_one("#title",Static)
+        title.update("单分界符表")
         table = self.query_one("#key", DataTable)
         table.clear(True)
         self.tb = single_separator
