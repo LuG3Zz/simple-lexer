@@ -3,72 +3,69 @@ from enum import Enum
 ##################
 # pascal  字母表 #
 ##################
+lowercase = [ "a",
+             "b",
+             "c",
+             "d",
+             "e",
+             "f",
+             "g",
+             "h",
+             "i",
+             "j",
+             "k",
+             "l",
+             "m",
+             "n",
+             "o",
+             "p",
+             "q",
+             "r",
+             "s",
+             "t",
+             "u",
+             "v",
+             "w",
+             "x",
+             "y",
+             "z",
+             ]
+uppercase = [ "A",
+             "B",
+             "C",
+             "D",
+             "E",
+             "F",
+             "G",
+             "H",
+             "I",
+             "J",
+             "K",
+             "L",
+             "M",
+             "N",
+             "O",
+             "P",
+             "Q",
+             "R",
+             "S",
+             "T",
+             "U",
+             "V",
+             "W",
+             "X",
+             "Y",
+             "Z",
+             ]
+digits = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
+operator = [ "+", "-", "*", "/", "<", "=" ]
+pare = [ "(", ")", "[", "]", "{", "}" ]
+punctuation = [ ":", ".", ";", "'" ]
+separator = [ " " ]
 
-lowercase = {
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-}
-uppercase = {
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-}
-digits = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
-operator = {"+", "-", "*", "/", "<", "="}
-pare = {"(", ")", "[", "]", "{", "}"}
-punctuation = {":", ".", ";", "'"}
-separator = {" "}
+single_separator = operator + pare + punctuation
 
-single_separator = operator | pare | punctuation
-
-RESERVED_KEYWORDS = {
+RESERVED_KEYWORDS = [
     "PROGRAM",
     "FUNCTION",
     "PROCEDURE",
@@ -97,7 +94,7 @@ RESERVED_KEYWORDS = {
     "NOT",
     "READ",
     "WRITE",
-}
+]
 ################
 # pascal states#
 ################
@@ -146,22 +143,9 @@ start_state = State.START.value
 # Define the accept states
 accept_states = {"q1", "q2", "q3", "q5", "q7", "q9", "q10", "q12", "q13"}
 # 定义字母表
-alphabet = uppercase | lowercase | digits | operator | pare | punctuation
-
-letters = uppercase | lowercase
-# print(letters)
-# Define the transition function as a dictionary
-transition_function = {
-    ("q0", "0"): "q1",
-    ("q0", "1"): "q2",
-    ("q1", "0"): "q0",
-    ("q1", "1"): "q3",
-    ("q2", "0"): "q3",
-    ("q2", "1"): "q0",
-    ("q3", "0"): "q2",
-    ("q3", "1"): "q1",
-}
-
+alphabet = uppercase + lowercase + digits + operator + pare + punctuation
+letters = uppercase + lowercase
+# 使用字典定义状态转移函数
 transition_id = dict(
     [
         ((str(i), c), str(j))
@@ -248,8 +232,7 @@ $$    $$ |$$ |  $$ |$$    $$ |$$ |$$    $$ |/$$      |$$       |$$ |
                                   $$    $$/                               
                                    $$$$$$/                                
 """
-
-# print(transition_single)
 # print(State.ID.name)
+# print(transition_single)
 #row = [(i, j) for i, j in enumerate(RESERVED_KEYWORDS)]
 # print(row)

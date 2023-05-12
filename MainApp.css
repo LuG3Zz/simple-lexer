@@ -1,3 +1,7 @@
+Screen {
+	layers: basic sidebar;
+  background: $surface-darken-1;
+}
 #main {
   layout: vertical;
 }
@@ -22,12 +26,24 @@ Footer{
   background: $surface-darken-1;
 }
 
+Static{
+  content-align: center middle;
+
+}
 
 
 #text {
-  max-height:56%;
+  max-height:58%;
   content-align: center middle;
   text-style: bold;
+  background: $surface-darken-1;
+
+}
+#title {
+  max-height:58%;
+  content-align: center middle;
+  text-style: bold;
+  background: $surface-darken-1;
 
 }
 
@@ -65,8 +81,22 @@ Filebrowser.-show-tree #tree-view {
 
 }
 DataTable {
+  content-align-horizontal: center;
+  text-align: center;
+  content-align-vertical: middle;
   max-height:50%;
   text-style: bold;
   min-height:50%;
 }
 
+#sidebar {
+	layer: sidebar;
+	width: 25;
+	height: 100%;
+	offset-x: -100%;
+	transition: offset 500ms in_out_cubic;
+}
+
+#sidebar.-active {
+	offset-x: 0%;
+} 

@@ -7,75 +7,100 @@ from textual.containers import Horizontal, Vertical,Container, VerticalScroll
 from textual.screen import Screen
 from textual.reactive import var
 from textual.widgets import (Button, DataTable, Header, Input, ListItem,
-                             ListView, Static,DirectoryTree,Footer)
+    ListView, Static,DirectoryTree,Footer)
 
 sys.path.append(r"./src")
 from DFA import *
 from sheet import *
 
 
-class KeywordTable(Screen):
-
+class BasicTable(Screen):
+    BINDINGS = [
+        ("tab", "toggle_class('#sidebar', '-active')",
+         "查看更多功能")
+    ]
     def compose(self) -> ComposeResult:
+        yield Static(id="title")
         yield DataTable(id="key")
         yield Button("返回主界面", id="btn_exit")
+        with Container(id="sidebar"):
+            yield Input(placeholder="请输入字符", id="word_input")
+            yield Button("增加", id="btn_add")
+            yield Button("搜索", id="btn_search")
+            yield Button("删除", id="btn_del")
+            yield Static(id="label")
+        yield Footer()
+
+    def on_button_pressed(self, event):
+        input = self.query_one("#word_input", Input)
+        label = self.query_one("#label",Static)
+        if event.button.id == "btn_exit":
+            app.pop_screen()
+        if event.button.id == "btn_add":
+            if input.value in self.tb or input.value is None:
+                label.update("添加失败，值已存在或为空")
+                pass
+            else:
+                self.tb.append(input.value)
+                label.update("添加成功")
+                self.on_mount()
+        if event.button.id == "btn_del":
+            if input.value not in self.tb :
+                label.update("值不存在")
+                pass
+            else:
+                self.tb.remove(input.value)
+                label.update("删除成功")
+                self.on_mount()
+        if event.button.id == "btn_search":
+            if input.value not in self.tb :
+                label.update("值不存在")
+                pass
+            else:
+                label.update("该值存在")
+            
+
+class KeywordTable(BasicTable):
 
     def on_mount(self) -> None:
+        title = self.query_one("#title",Static)
+        title.update("关键字表")
         table = self.query_one("#key", DataTable)
-        table.add_column("id",width = 40)
+        table.clear(True)
+        self.tb = RESERVED_KEYWORDS
+        table.add_column("id",width = 50)
         table.add_column("关键字",width = 50)
         rows = [(i, j) for i, j in enumerate(RESERVED_KEYWORDS)]
         for row in rows:
             table.add_row(*row)
 
-    def on_button_pressed(self, event):
-        if event.button.id == "btn_exit":
-            app.pop_screen()
 
-
-class WordsTable(Screen):
-
-    def compose(self) -> ComposeResult:
-        yield DataTable(id="wordstable")
-        yield Button("返回主界面", id="btn_exit")
-
+class WordsTable(BasicTable):
     def on_mount(self) -> None:
-        table = self.query_one("#wordstable", DataTable)
+        table = self.query_one("#key", DataTable)
+        table.clear(True)
+        self.tb = alphabet 
         table.add_column("id",width = 40)
         table.add_column("字符",width = 50)
-        rows = [(i, j) for i, j in enumerate(alphabet)]
+        rows = [(i, j) for i, j in enumerate(self.tb)]
         for row in rows:
             table.add_row(*row)
 
-    def on_button_pressed(self, event):
-        if event.button.id == "btn_exit":
-            app.pop_screen()
-
-
-class SingleTable(Screen):
-
-    def compose(self) -> ComposeResult:
-        yield DataTable(id="singletable")
-        yield Button("返回主界面", id="btn_exit")
+class SingleTable(BasicTable):
 
     def on_mount(self) -> None:
-        table = self.query_one("#singletable", DataTable)
+        table = self.query_one("#key", DataTable)
+        table.clear(True)
+        self.tb = single_separator
         table.add_column("id",width = 40)
         table.add_column("字符",width = 50)
-        rows = [(i, j) for i, j in enumerate(single_separator)]
+        rows = [(i, j) for i, j in enumerate(self.tb)]
         for row in rows:
             table.add_row(*row)
-
-    def on_button_pressed(self, event):
-        if event.button.id == "btn_exit":
-            app.pop_screen()
-
 
 class Filebrowser(Screen):
-
-
     BINDINGS = [
-        ("q", "quit", "Quit"),
+        ("q", "quit", "退出"),
     ]
     def watch_show_tree(self, show_tree: bool) -> None:
         """Called when show_tree is modified."""
@@ -105,17 +130,10 @@ class Filebrowser(Screen):
 
     def on_mount(self, event: events.Mount) -> None:
         self.query_one(DirectoryTree).focus()
-        self.dfa = DFA(
-                states,
-                alphabet,
-                transition_function,
-                start_state,
-                accept_states,
-            )
 
     def on_directory_tree_file_selected(
         self, event: DirectoryTree.FileSelected
-    ) -> None:
+        ) -> None:
         """Called when the user click a file in the directory tree."""
         self.path = "./"+str(event.path)
         event.stop()
@@ -138,6 +156,13 @@ class Filebrowser(Screen):
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_start":
+            self.dfa = DFA(
+                states,
+                alphabet,
+                transition_function,
+                start_state,
+                accept_states,
+            )
             tb = self.query_one("#tokens", DataTable)
             tb.clear(True)
             file = self.query_one("#tree-view", DirectoryTree)
@@ -161,15 +186,15 @@ class DFA_display(Screen):
         yield Button("开始识别", id="btn_start")
         yield Button("查看自动机状态转移图", id="btn_display")
         yield Button("返回主界面", id="btn_exit")
-    
+
     def on_mount(self):
         self.dfa = DFA(
-                states,
-                alphabet,
-                transition_function,
-                start_state,
-                accept_states,
-            )
+            states,
+            alphabet,
+            transition_function,
+            start_state,
+            accept_states,
+        )
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_exit":
@@ -177,8 +202,9 @@ class DFA_display(Screen):
         if event.button.id == "btn_display":
             self.dfa.view()
 
-            
+
         if event.button.id == "btn_start":
+            self.on_mount()
             tb = self.query_one("#tokens", DataTable)
             tb.clear(True)
             input = self.query_one("#input", Input)

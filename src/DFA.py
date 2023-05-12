@@ -2,7 +2,6 @@ import graphviz
 
 from sheet import *
 
-
 class DFA:
     def __init__(
         self,
@@ -11,7 +10,7 @@ class DFA:
         transition_function,
         start_state,
         accept_states,
-    ):
+        ):
         # 状态机的五个部分：状态集合，字符集，起始状态，接受状态集合，转移函数
         self.states = states
         self.alphabet = alphabet
@@ -19,12 +18,15 @@ class DFA:
         self.start_state = start_state
         self.accept_states = accept_states
         self.current_state = start_state
+        #状态机识别出的内容
         self.text = ""
+        #状态机识别出的内容行号
         self.line = 1
+        # 状态机的图
         self.graph = graphviz.Digraph("DFA", filename="../image/dfa.gv",format="png",engine='dot')
 
     def view(self):
-        # Add a start arrow
+        # 添加开始箭头
         self.graph.attr("node", shape="none")
         self.graph.node("", label="")
         self.graph.edge("", "q0")
@@ -74,17 +76,17 @@ class DFA:
                     self.text = input[start:end]
                     # print(self.text)
                     if (
-                        token_type == State.ID.name
-                        and self.text.upper() in RESERVED_KEYWORDS
-                    ):
+                            token_type == State.ID.name
+                            and self.text.upper() in RESERVED_KEYWORDS
+                            ):
                         token_type = "KEYWORD"  # 如果是关键字，修改token类型为KEYWORD
                     if (
-                        token_type == State.COMMENT.name #如果是注释，则将{}删除
-                    ):
+                            token_type == State.COMMENT.name #如果是注释，则将{}删除
+                            ):
                         self.text =self.text.strip('{}') 
                     if (
-                        token_type == State.STRING.name #如果是注释，则将{}删除
-                    ):
+                            token_type == State.STRING.name #如果是注释，则将{}删除
+                            ):
                         self.text =self.text.strip('\'') 
                     tokens.append((token_type, self.text,self.line))
                     if ch == " " or ch == "\n" or ch == "\t":
@@ -121,16 +123,16 @@ class DFA:
                     print(
                         "Error: unrecognized character '%s' at position %d" % (ch, end)
                     )
-                    
+
         # 处理最后一个字符后的情况
         if self.current_state in self.accept_states:
             # 如果到达终态，生成一个token，并添加到token列表中
             token_type = State(self.current_state).name
             token_value = input[start:end]
             if (
-                token_type == State.ID.value
-                and token_value.upper() in RESERVED_KEYWORDS
-            ):
+                    token_type == State.ID.name
+                    and token_value.upper() in RESERVED_KEYWORDS
+                    ):
                 token_type = "KEYWORD"  # 如果是关键字，修改token类型为KEYWORD
             tokens.append((token_type, token_value,self.line))
 
@@ -150,9 +152,6 @@ class DFA:
             print(line.strip())
             tokens += self.scan(line)
         return tokens
-    
-
-
 def main():
     dfa = DFA(
         states,
@@ -162,11 +161,7 @@ def main():
         accept_states,
     )
     #dfa.scanfile("source.txt")
-    print(dfa.scan("var ! !"))
+    print(dfa.scan("var var var"))
     # 打开文件
-
-    dfa.view()
-
-
 if __name__ == "__main__":
     main()
